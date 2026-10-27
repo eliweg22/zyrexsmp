@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zyrex SMP - Server Statistics & Status</title>
+    <title id="page-title">Zyrex SMP - Server Statistics & Status</title>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -133,94 +133,4 @@
             border-radius: 10px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: var(--accent-color);
-        }
-
-        .card-info h3 {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-        }
-
-        .card-info p {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .status-online { color: var(--success); }
-        .status-offline { color: var(--danger); }
-
-        .dashboard-banner {
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            border: 1px solid #334155;
-            padding: 3rem 2rem;
-            text-align: center;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .dashboard-banner i.fa-chart-pie {
-            font-size: 4rem;
-            color: var(--accent-color);
-            background: rgba(56, 189, 248, 0.1);
-            padding: 25px;
-            border-radius: 50%;
-        }
-
-        .dashboard-banner h2 {
-            font-size: 2rem;
-        }
-
-        .dashboard-banner p {
-            color: var(--text-secondary);
-            max-width: 600px;
-            line-height: 1.5;
-        }
-
-        .btn-large {
-            background-color: var(--accent-color);
-            color: #0f172a;
-            padding: 14px 28px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.2s;
-            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
-        }
-
-        .btn-large:hover {
-            background-color: var(--accent-hover);
-            color: #fff;
-            transform: translateY(-2px);
-        }
-
-        footer {
-            text-align: center;
-            padding: 1.5rem;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            border-top: 1px solid #334155;
-            margin-top: auto;
-        }
-    </style>
-</head>
-<body>
-
-    <header>
-        <div class="logo">
-            <i class="fa-solid fa-server"></i>
-            <h1>Zyrex SMP Stats</h1>
-        </div>
-        <div class="header-controls">
-            <select id="lang-select" class="lang-select" onchange="changeLanguage(this.value)">
-                <option value="de">🇩🇪 Deutsch</option>
+            justify
