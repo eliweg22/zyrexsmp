@@ -100,7 +100,7 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             width: 100%;
             margin: 2rem auto;
             padding: 0 1.5rem;
@@ -117,4 +117,194 @@
         }
 
         .card {
-            background-color: var(--card-
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(56, 189, 248, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--accent-color);
+        }
+
+        .card-info h3 {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .card-info p {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .status-online { color: var(--success); }
+        .status-offline { color: var(--danger); }
+
+        /* Schicke Dashboard-Box mit Button */
+        .dashboard-banner {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid #334155;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .dashboard-banner i.fa-chart-pie {
+            font-size: 4rem;
+            color: var(--accent-color);
+            background: rgba(56, 189, 248, 0.1);
+            padding: 25px;
+            border-radius: 50%;
+        }
+
+        .dashboard-banner h2 {
+            font-size: 2rem;
+        }
+
+        .dashboard-banner p {
+            color: var(--text-secondary);
+            max-width: 600px;
+            line-height: 1.5;
+        }
+
+        .btn-large {
+            background-color: var(--accent-color);
+            color: #0f172a;
+            padding: 14px 28px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+        }
+
+        .btn-large:hover {
+            background-color: var(--accent-hover);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            border-top: 1px solid #334155;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-server"></i>
+            <h1>Zyrex SMP Stats</h1>
+        </div>
+        <div class="header-controls">
+            <select id="lang-select" class="lang-select" onchange="changeLanguage(this.value)">
+                <option value="de">🇩🇪 Deutsch</option>
+                <option value="sv">🇸🇪 Svenska</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="es">🇪🇸 Español</option>
+                <option value="ch">🇨🇭 Schwiizerdütsch</option>
+                <option value="it">🇮🇹 Italiano</option>
+                <option value="nl">🇳🇱 Nederlands</option>
+                <option value="pl">🇵🇱 Polski</option>
+                <option value="fr">🇫🇷 Français</option>
+            </select>
+            <div class="server-ip-box" onclick="copyIP()">
+                <i class="fa-regular fa-copy"></i>
+                <span id="ip-text">zyrex-smp.falix.gg</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Live Status Cards -->
+        <div class="grid-cards">
+            <div class="card">
+                <div class="card-icon"><i class="fa-solid fa-signal"></i></div>
+                <div class="card-info">
+                    <h3 id="txt-status-title">Server Status</h3>
+                    <p id="server-status">Laden...</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fa-solid fa-users"></i></div>
+                <div class="card-info">
+                    <h3 id="txt-players-title">Spieler Online</h3>
+                    <p id="player-count">0 / 0</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fa-solid fa-code-branch"></i></div>
+                <div class="card-info">
+                    <h3 id="txt-version-title">Version</h3>
+                    <p id="server-version">-</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schicke Banner-Sektion -->
+        <div class="dashboard-banner">
+            <i class="fa-solid fa-chart-pie"></i>
+            <h2 id="txt-banner-title">Player Analytics (PLAN)</h2>
+            <p id="txt-banner-desc">Erfahre alle detaillierten Statistiken, Spielzeiten, Kills und Errungenschaften der Spieler auf unserem Server.</p>
+            <a id="external-plan-link" href="#" target="_blank" class="btn-large">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> <span id="txt-btn">PLAN Dashboard öffnen</span>
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; Zyrex SMP. Powered by PLAN Plugin & GitHub Pages.</p>
+    </footer>
+
+    <script>
+        const DOMAIN_IP = "zyrex-smp.falix.gg";
+        const PLAN_URL = "http://5.9.89.83:20032/server/Zyrex-SMP/overview";
+
+        document.getElementById('external-plan-link').href = PLAN_URL;
+
+        const translations = {
+            de: {
+                statusTitle: "Server Status", playersTitle: "Spieler Online", versionTitle: "Version",
+                bannerTitle: "Player Analytics (PLAN)", bannerDesc: "Erfahre alle detaillierten Statistiken, Spielzeiten, Kills und Errungenschaften der Spieler auf unserem Server.",
+                btnText: "PLAN Dashboard öffnen", error: "Fehler", copied: "Server-IP kopiert: "
+            },
+            sv: {
+                statusTitle: "Serverstatus", playersTitle: "Spelare Online", versionTitle: "Version",
+                bannerTitle: "Player Analytics (PLAN)", bannerDesc: "Se alla detaljerade statistik, spelade timmar, kills och prestationer för spelare på vår server.",
+                btnText: "Öppna PLAN Dashboard", error: "Fel", copied: "Server-IP kopierad: "
+            },
+            en: {
+                statusTitle: "Server Status", playersTitle: "Players Online", versionTitle: "Version",
+                bannerTitle: "Player Analytics (PLAN)", bannerDesc: "Check out detailed statistics, playtime, kills and achievements of players on our server.",
+                btnText: "Open PLAN Dashboard", error: "Error", copied: "Server IP copied: "
+            },
+            es: {
+                statusTitle: "Estado del Servidor", playersTitle: "Jugadores en Línea", versionTitle: "Versión",
+                bannerTitle: "Player Analytics (PLAN)", bannerDesc: "Consulta estadísticas detalladas, tiempo de juego, bajas y logros de los jugadores en nuestro servidor.",
+                btnText: "Abrir Panel PLAN", error: "Error
