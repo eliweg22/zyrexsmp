@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title">Zyrex SMP - Server Statistics & Status</title>
-    <!-- FontAwesome Icons -->
+    <!-- FontAwesome icons for Minecraft/gaming style -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -16,6 +16,7 @@
             --text-secondary: #94a3b8;
             --success: #22c55e;
             --danger: #ef4444;
+            --border-color: #334155;
         }
 
         * {
@@ -39,7 +40,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #334155;
+            border-bottom: 1px solid var(--border-color);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             flex-wrap: wrap;
             gap: 1rem;
@@ -65,34 +66,41 @@
             display: flex;
             align-items: center;
             gap: 1rem;
+            flex-wrap: wrap;
         }
 
         .server-ip-box {
             background: #0f172a;
             padding: 8px 16px;
             border-radius: 8px;
-            border: 1px solid #334155;
+            border: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             gap: 10px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
+            user-select: none;
         }
 
         .server-ip-box:hover {
             border-color: var(--accent-color);
+            transform: translateY(-1px);
+        }
+
+        .server-ip-box i {
+            color: var(--accent-color);
         }
 
         .lang-select {
             background: #0f172a;
-            border: 1px solid #334155;
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 8px 12px;
             color: var(--text-color);
             cursor: pointer;
             font-weight: 600;
             outline: none;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
         }
 
         .lang-select:hover {
@@ -112,7 +120,7 @@
 
         .grid-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 1.5rem;
         }
 
@@ -120,10 +128,11 @@
             background-color: var(--card-bg);
             border-radius: 12px;
             padding: 1.5rem;
-            border: 1px solid #334155;
+            border: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             gap: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         .card-icon {
@@ -133,4 +142,322 @@
             border-radius: 10px;
             display: flex;
             align-items: center;
-            justify
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            flex-shrink: 0;
+        }
+
+        .card-info h3 {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-info p {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .status-online { color: var(--success); }
+        .status-offline { color: var(--danger); }
+        .status-loading { color: var(--text-secondary); }
+
+        .dashboard-banner {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            padding: 3.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .dashboard-banner i.fa-chart-pie {
+            font-size: 3.5rem;
+            color: var(--accent-color);
+            background: rgba(56, 189, 248, 0.1);
+            padding: 24px;
+            border-radius: 50%;
+        }
+
+        .dashboard-banner h2 {
+            font-size: 2rem;
+        }
+
+        .dashboard-banner p {
+            color: var(--text-secondary);
+            max-width: 650px;
+            line-height: 1.6;
+            font-size: 1.05rem;
+        }
+
+        .btn-large {
+            background-color: var(--accent-color);
+            color: #0f172a;
+            padding: 14px 32px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(56, 189, 248, 0.3);
+        }
+
+        .btn-large:hover {
+            background-color: var(--accent-hover);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .header-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .server-ip-box {
+                justify-content: center;
+            }
+            .dashboard-banner {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-server"></i>
+            <h1>Zyrex SMP Stats</h1>
+        </div>
+        <div class="header-controls">
+            <!-- 9 Languages Selector Dropdown -->
+            <select id="lang-select" class="lang-select" onchange="changeLanguage(this.value)">
+                <option value="de">🇩🇪 Deutsch</option>
+                <option value="sv">🇸🇪 Svenska</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="es">🇪🇸 Español</option>
+                <option value="ch">🇨🇭 Schwiizerdütsch</option>
+                <option value="it">🇮🇹 Italiano</option>
+                <option value="nl">🇳🇱 Nederlands</option>
+                <option value="pl">🇵🇱 Polski</option>
+                <option value="fr">🇫🇷 Français</option>
+            </select>
+            <!-- Copyable IP Box -->
+            <div class="server-ip-box" onclick="copyIP()" title="Klicken zum Kopieren">
+                <i class="fa-regular fa-copy"></i>
+                <span id="ip-text">zyrex-smp.falix.gg</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Live Server Status Cards -->
+        <div class="grid-cards">
+            <div class="card">
+                <div class="card-icon"><i class="fa-solid fa-signal"></i></div>
+                <div class="card-info">
+                    <h3 id="txt-status-title">Server Status</h3>
+                    <p id="server-status" class="status-loading">Prüfen...</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fa-solid fa-users"></i></div>
+                <div class="card-info">
+                    <h3 id="txt-players-title">Spieler Online</h3>
+                    <p id="player-count">0 / 0</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fa-solid fa-code-branch"></i></div>
+                <div class="card-info">
+                    <h3 id="txt-version-title">Version</h3>
+                    <p id="server-version">-</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hero / Banner Section for PLAN Analytics -->
+        <div class="dashboard-banner">
+            <i class="fa-solid fa-chart-pie"></i>
+            <h2 id="txt-banner-title">Player Analytics (PLAN)</h2>
+            <p id="txt-banner-desc">Erfahre alle detaillierten Statistiken, Spielzeiten, Kills und Errungenschaften der Spieler auf unserem Server.</p>
+            <a id="external-plan-link" href="http://5.9.89.83:20032/server/Zyrex-SMP/overview" target="_blank" rel="noopener noreferrer" class="btn-large">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> <span id="txt-btn">PLAN Dashboard öffnen</span>
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; Zyrex SMP. Powered by PLAN Plugin & GitHub Pages.</p>
+    </footer>
+
+    <script>
+        var DOMAIN_IP = "zyrex-smp.falix.gg";
+
+        // Full multilingual translation dictionary for all 9 languages
+        var translations = {
+            de: {
+                statusTitle: "Server Status", playersTitle: "Spieler Online", versionTitle: "Version",
+                bannerTitle: "Player Analytics (PLAN)", bannerDesc: "Erfahre alle detaillierten Statistiken, Spielzeiten, Kills und Errungenschaften der Spieler auf unserem Server.",
+                btnText: "PLAN Dashboard öffnen", online: "Online", offline: "Offline", checking: "Prüfen...", error: "Fehler", copied: "Server-IP kopiert: "
+            },
+            sv: {
+                statusTitle: "Serverstatus", playersTitle: "Spelare Online", versionTitle: "Version",
+                bannerTitle: "Player Analytics (PLAN)", bannerDesc: "Se alla detaljerade statistik, spelade timmar, kills och prestationer för spelare på vår server.",
+                btnText: "Öppna PLAN Dashboard", online: "Online", offline: "Offline", checking: "Kontrollerar...", error: "Fel", copied: "Server-IP kopierad: "
+            },
+            en: {
+                statusTitle: "Server Status", playersTitle: "Players Online", versionTitle: "Version",
+                bannerTitle: "Player Analytics (PLAN)", bannerDesc: "Check out detailed statistics, playtime, kills and achievements of players on our server.",
+                btnText: "Open PLAN Dashboard", online: "Online", offline: "Offline", checking: "Checking...", error: "Error", copied: "Server IP copied: "
+            },
+            es: {
+                statusTitle: "Estado del Servidor", playersTitle: "Jugadores en Línea", versionTitle: "Versión",
+                bannerTitle: "Player Analytics (PLAN)", bannerDesc: "Consulta estadísticas detalladas, tiempo de juego, bajas y logros de los jugadores en nuestro servidor.",
+                btnText: "Abrir Panel PLAN", online: "En línea", offline: "Desconectado", checking: "Comprobando...", error: "Error", copied: "¡IP del servidor copiada: "
+            },
+            ch: {
+                statusTitle: "Server Status", playersTitle: "Spieler Online", versionTitle: "Version",
+                bannerTitle: "Player Analytics (PLAN)", bannerDesc: "lueg all d'Statistiken, Spiilziite, Kills und Achievement vo de Spiiler uf eusem Server naa.",
+                btnText: "PLAN Dashboard ufmache", online: "Online 🎉", offline: "Offliine", checking: "Am Prüfe...", error: "Fehler", copied: "Server-IP kopiert: "
+            },
+            it: {
+                statusTitle: "Stato del Server", playersTitle: "Giocatori Online", versionTitle: "Versione",
+                bannerTitle: "Player Analytics (PLAN)", bannerDesc: "Scopri statistiche dettagliate, ore di gioco, kill e obiettivi dei giocatori sul nostro server.",
+                btnText: "Apri PLAN Dashboard", online: "Online", offline: "Offline", checking: "Verifica...", error: "Errore", copied: "IP del server copiato: "
+            },
+            nl: {
+                statusTitle: "Server Status", playersTitle: "Spelers Online", versionTitle: "Versie",
+                bannerTitle: "Player Analytics (PLAN)", bannerDesc: "Bekijk gedetailleerde statistieken, speeltijd, kills en prestaties van spelers op onze server.",
+                btnText: "Open PLAN Dashboard", online: "Online", offline: "Offline", checking: "Controleren...", error: "Fout", copied: "Server-IP gekopieerd: "
+            },
+            pl: {
+                statusTitle: "Status Serwera", playersTitle: "Gracze Online", versionTitle: "Wersja",
+                bannerTitle: "Player Analytics (PLAN)", bannerDesc: "Sprawdź szczegółowe statystyki, czas gry, zabójstwa i osiągnięcia graczy na naszym serwerze.",
+                btnText: "Otwórz Panel PLAN", online: "Online", offline: "Offline", checking: "Sprawdzanie...", error: "Błąd", copied: "Skopiowano IP serwera: "
+            },
+            fr: {
+                statusTitle: "État du Serveur", playersTitle: "Joueurs en Ligne", versionTitle: "Version",
+                bannerTitle: "Player Analytics (PLAN)", bannerDesc: "Découvrez des statistiques détaillées, le temps de jeu, les kills et les succès des joueurs sur notre serveur.",
+                btnText: "Ouvrir le Tableau PLAN", online: "En ligne", offline: "Hors ligne", checking: "Vérification...", error: "Erreur", copied: "IP du serveur copiée : "
+            }
+        };
+
+        var currentLang = "de";
+        var serverDataCache = null;
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            var t = translations[currentLang] || translations["de"];
+            
+            document.getElementById("txt-status-title").innerText = t.statusTitle;
+            document.getElementById("txt-players-title").innerText = t.playersTitle;
+            document.getElementById("txt-version-title").innerText = t.versionTitle;
+            document.getElementById("txt-banner-title").innerText = t.bannerTitle;
+            document.getElementById("txt-banner-desc").innerText = t.bannerDesc;
+            document.getElementById("txt-btn").innerText = t.btnText;
+
+            renderStatus();
+        }
+
+        function renderStatus() {
+            var t = translations[currentLang] || translations["de"];
+            var statusEl = document.getElementById('server-status');
+            var playersEl = document.getElementById('player-count');
+            var versionEl = document.getElementById('server-version');
+
+            if (!serverDataCache) {
+                statusEl.innerText = t.checking;
+                statusEl.className = "status-loading";
+                return;
+            }
+
+            if (serverDataCache.online) {
+                statusEl.innerText = t.online;
+                statusEl.className = "status-online";
+                playersEl.innerText = (serverDataCache.players ? serverDataCache.players.online : 0) + " / " + (serverDataCache.players ? serverDataCache.players.max : 0);
+                versionEl.innerText = serverDataCache.version || "-";
+            } else {
+                statusEl.innerText = t.offline;
+                statusEl.className = "status-offline";
+                playersEl.innerText = "0 / 0";
+                versionEl.innerText = "-";
+            }
+        }
+
+        function fetchServerStatus() {
+            fetch("https://api.mcsrvstat.us/3/" + DOMAIN_IP)
+                .then(function(response) { return response.json(); })
+                .then(function(data) {
+                    serverDataCache = data;
+                    renderStatus();
+                })
+                .catch(function(err) {
+                    console.log("Status API call failed:", err);
+                    var t = translations[currentLang] || translations["de"];
+                    var statusEl = document.getElementById('server-status');
+                    statusEl.innerText = t.error;
+                    statusEl.className = "status-offline";
+                });
+        }
+
+        function copyIP() {
+            // Play local XP audio sound uploaded to GitHub repo
+            try {
+                var audio = new Audio("xp-old.mp3");
+                audio.volume = 0.5;
+                audio.play();
+            } catch (e) {
+                console.log("Audio play blocked by browser:", e);
+            }
+
+            // Clipboard fallback mechanism
+            var tempInput = document.createElement("input");
+            tempInput.value = DOMAIN_IP;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            var t = translations[currentLang] || translations["de"];
+            alert(t.copied + DOMAIN_IP);
+        }
+
+        // Initial setup
+        fetchServerStatus();
+        setInterval(fetchServerStatus, 30000); // refresh every 30 seconds
+    </script>
+</body>
+</html>
+```
+
+### Summary of what was created:
+- **Clean HTML/CSS/JS** consolidated into a single file to eliminate crash vulnerabilities.
+- **Local Sound Integration**: Uses `new Audio("xp-old.mp3")` as requested.
+- **Language Dropdown**: Switches all 9 languages on the fly instantly.
+- **Live Minecraft Status**: Fetches server status, version, and player counts from `mcsrvstat.us`.
