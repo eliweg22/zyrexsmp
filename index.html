@@ -3,118 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">Zyrex SMP - Server Statistics & Status</title>
-    <!-- FontAwesome für Icons -->
+    <title>Zyrex SMP - Server Statistics & Status</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent-color: #38bdf8;
-            --accent-hover: #0284c7;
-            --text-color: #f8fafc;
-            --text-secondary: #94a3b8;
-            --success: #22c55e;
-            --danger: #ef4444;
-        }
-
-        * {
-            box-sizing: border-box;
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            min-height: 100vh;
             display: flex;
             flex-direction: column;
+            min-height: 100vh;
         }
-
         header {
-            background-color: var(--card-bg);
+            background-color: #1e293b;
             padding: 1.5rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid #334155;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            flex-wrap: wrap;
-            gap: 1rem;
         }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo i {
-            font-size: 2rem;
-            color: var(--accent-color);
-        }
-
-        .logo h1 {
-            font-size: 1.5rem;
-            letter-spacing: 1px;
-        }
-
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .server-ip-box {
-            background: #0f172a;
-            padding: 8px 16px;
-            border-radius: 8px;
-            border: 1px solid #334155;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .server-ip-box:hover {
-            border-color: var(--accent-color);
-        }
-
-        .lang-select {
-            background: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 8px;
-            padding: 8px 12px;
-            color: var(--text-color);
-            cursor: pointer;
-            font-weight: 600;
-            outline: none;
-            transition: all 0.2s;
-        }
-
-        .lang-select:hover {
-            border-color: var(--accent-color);
-        }
-
+        h1 { margin: 0; font-size: 1.5rem; color: #38bdf8; }
         .container {
-            max-width: 1200px;
-            width: 100%;
-            margin: 2rem auto;
+            max-width: 1000px;
+            margin: 3rem auto;
             padding: 0 1.5rem;
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
+            text-align: center;
         }
-
-        .grid-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
+        .btn {
+            background-color: #38bdf8;
+            color: #0f172a;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: inline-block;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+            margin-top: 2rem;
         }
+        .btn:hover { background-color: #0284c7; color: #fff; }
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: #94a3b8;
+            border-top: 1px solid #334155;
+        }
+    </style>
+</head>
+<body>
 
-        .card {
-            background-color: var(--card-bg);
+    <header>
+        <h1><i class="fa-solid fa-server"></i> Zyrex SMP Stats</h1>
+    </header>
+
+    <div class="container">
+        <h2>Willkommen auf dem Zyrex SMP Dashboard!</h2>
+        <p style="color: #94a3b8; margin-top: 1rem; font-size: 1.1rem;">Klicke unten, um direkt zum interaktiven PLAN-Webpanel zu gelangen:</p>
+        
+        <br>
+        <a href="http://5.9.89.83:20032/server/Zyrex-SMP/overview" target="_blank" class="btn">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> PLAN Dashboard öffnen
+        </a>
+    </div>
+
+    <footer>
+        <p>&copy; Zyrex SMP. Powered by GitHub Pages.</p>
+    </footer>
+
+</body>
+</html>
