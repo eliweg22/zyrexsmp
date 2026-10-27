@@ -83,21 +83,20 @@
             border-color: var(--accent-color);
         }
 
-        .lang-switch {
+        /* Language Dropdown Select */
+        .lang-select {
             background: #0f172a;
             border: 1px solid #334155;
             border-radius: 8px;
-            padding: 6px 12px;
+            padding: 8px 12px;
             color: var(--text-color);
             cursor: pointer;
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            outline: none;
             transition: all 0.2s;
         }
 
-        .lang-switch:hover {
+        .lang-select:hover {
             border-color: var(--accent-color);
         }
 
@@ -189,180 +188,4 @@
             padding: 14px 28px;
             border-radius: 10px;
             text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.2s;
-            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
-        }
-
-        .btn-large:hover {
-            background-color: var(--accent-hover);
-            color: #fff;
-            transform: translateY(-2px);
-        }
-
-        footer {
-            text-align: center;
-            padding: 1.5rem;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            border-top: 1px solid #334155;
-            margin-top: auto;
-        }
-    </style>
-</head>
-<body>
-
-    <header>
-        <div class="logo">
-            <i class="fa-solid fa-server"></i>
-            <h1>Zyrex SMP Stats</h1>
-        </div>
-        <div class="header-controls">
-            <button class="lang-switch" onclick="toggleLanguage()">
-                <i class="fa-solid fa-globe"></i> <span id="lang-label">SVENSKA</span>
-            </button>
-            <div class="server-ip-box" onclick="copyIP()">
-                <i class="fa-regular fa-copy"></i>
-                <span id="ip-text">zyrex-smp.falix.gg</span>
-            </div>
-        </div>
-    </header>
-
-    <div class="container">
-        <div class="grid-cards">
-            <div class="card">
-                <div class="card-icon"><i class="fa-solid fa-signal"></i></div>
-                <div class="card-info">
-                    <h3 id="txt-status-title">Server Status</h3>
-                    <p id="server-status">Laden...</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-icon"><i class="fa-solid fa-users"></i></div>
-                <div class="card-info">
-                    <h3 id="txt-players-title">Spieler Online</h3>
-                    <p id="player-count">0 / 0</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-icon"><i class="fa-solid fa-code-branch"></i></div>
-                <div class="card-info">
-                    <h3 id="txt-version-title">Version</h3>
-                    <p id="server-version">-</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="dashboard-banner">
-            <i class="fa-solid fa-chart-pie"></i>
-            <h2 id="txt-banner-title">Player Analytics (PLAN)</h2>
-            <p id="txt-banner-desc">Erfahre alle detaillierten Statistiken, Spielzeiten, Kills und Errungenschaften der Spieler auf unserem Server im interaktiven Webpanel.</p>
-            <a id="external-plan-link" href="#" target="_blank" class="btn-large">
-                <i class="fa-solid fa-arrow-up-right-from-square"></i> <span id="txt-btn">PLAN Dashboard öffnen</span>
-            </a>
-        </div>
-    </div>
-
-    <footer>
-        <p>&copy; Zyrex SMP. Powered by PLAN Plugin & GitHub Pages.</p>
-    </footer>
-
-    <script>
-        const DOMAIN_IP = "zyrex-smp.falix.gg";
-        const DYNAMIC_IP = "5.9.89.83"; 
-        const PLAN_PORT = "20032"; 
-
-        const planUrl = `http://${DYNAMIC_IP}:${PLAN_PORT}`;
-        document.getElementById('external-plan-link').href = planUrl;
-
-        const translations = {
-            de: {
-                langLabel: "SVENSKA",
-                statusTitle: "Server Status",
-                playersTitle: "Spieler Online",
-                versionTitle: "Version",
-                bannerTitle: "Player Analytics (PLAN)",
-                bannerDesc: "Erfahre alle detaillierten Statistiken, Spielzeiten, Kills und Errungenschaften der Spieler auf unserem Server im interaktiven Webpanel.",
-                btnText: "PLAN Dashboard öffnen",
-                loading: "Laden...",
-                error: "Fehler",
-                copied: "Server-IP kopiert: "
-            },
-            sv: {
-                langLabel: "DEUTSCH",
-                statusTitle: "Serverstatus",
-                playersTitle: "Spelare Online",
-                versionTitle: "Version",
-                bannerTitle: "Player Analytics (PLAN)",
-                bannerDesc: "Se alla detaljerade statistik, spelade timmar, kills och prestationer för spelare på vår server i den interaktiva webbpanelen.",
-                btnText: "Öppna PLAN Dashboard",
-                loading: "Laddar...",
-                error: "Fel",
-                copied: "Server-IP kopierad: "
-            }
-        };
-
-        let currentLang = "de";
-
-        function toggleLanguage() {
-            currentLang = currentLang === "de" ? "sv" : "de";
-            updateTexts();
-            fetchServerStatus();
-        }
-
-        function updateTexts() {
-            const t = translations[currentLang];
-            document.getElementById("lang-label").innerText = t.langLabel;
-            document.getElementById("txt-status-title").innerText = t.statusTitle;
-            document.getElementById("txt-players-title").innerText = t.playersTitle;
-            document.getElementById("txt-version-title").innerText = t.versionTitle;
-            document.getElementById("txt-banner-title").innerText = t.bannerTitle;
-            document.getElementById("txt-banner-desc").innerText = t.bannerDesc;
-            document.getElementById("txt-btn").innerText = t.btnText;
-        }
-
-        async function fetchServerStatus() {
-            try {
-                const response = await fetch(`https://api.mcsrvstat.us/3/${DOMAIN_IP}`);
-                const data = await response.json();
-
-                const statusEl = document.getElementById('server-status');
-                const playersEl = document.getElementById('player-count');
-                const versionEl = document.getElementById('server-version');
-
-                if (data.online) {
-                    statusEl.innerText = "Online";
-                    statusEl.className = "status-online";
-                    playersEl.innerText = `${data.players.online} / ${data.players.max}`;
-                    versionEl.innerText = data.version || "Unbekannt";
-                } else {
-                    statusEl.innerText = "Offline";
-                    statusEl.className = "status-offline";
-                    playersEl.innerText = "0 / 0";
-                    versionEl.innerText = "-";
-                }
-            } catch (err) {
-                console.error("Fehler beim Abrufen des Status:", err);
-                document.getElementById('server-status').innerText = translations[currentLang].error;
-            }
-        }
-
-        function copyIP() {
-            navigator.clipboard.writeText(DOMAIN_IP);
-            
-            const xpSound = new Audio("https://www.myinstants.com/media/sounds/minecraft-xp-sound.mp3");
-            xpSound.volume = 0.5;
-            xpSound.play().catch(e => console.log("Audio play blocked by browser:", e));
-
-            alert(translations[currentLang].copied + DOMAIN_IP);
-        }
-
-        fetchServerStatus();
-        setInterval(fetchServerStatus, 30000);
-    </script>
-</body>
-</html>
+            font-
