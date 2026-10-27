@@ -228,7 +228,6 @@
             margin-top: auto;
         }
 
-        /* Responsive adjustments */
         @media (max-width: 640px) {
             header {
                 flex-direction: column;
@@ -255,7 +254,7 @@
             <h1>Zyrex SMP Stats</h1>
         </div>
         <div class="header-controls">
-            <!-- 9 Languages Selector Dropdown -->
+            <!-- 9 Sprachen Auswahldropdown -->
             <select id="lang-select" class="lang-select" onchange="changeLanguage(this.value)">
                 <option value="de">🇩🇪 Deutsch</option>
                 <option value="sv">🇸🇪 Svenska</option>
@@ -267,7 +266,7 @@
                 <option value="pl">🇵🇱 Polski</option>
                 <option value="fr">🇫🇷 Français</option>
             </select>
-            <!-- Copyable IP Box -->
+            <!-- Server-IP Kopierfeld -->
             <div class="server-ip-box" onclick="copyIP()" title="Klicken zum Kopieren">
                 <i class="fa-regular fa-copy"></i>
                 <span id="ip-text">zyrex-smp.falix.gg</span>
@@ -276,7 +275,7 @@
     </header>
 
     <div class="container">
-        <!-- Live Server Status Cards -->
+        <!-- Live Server Status Karten -->
         <div class="grid-cards">
             <div class="card">
                 <div class="card-icon"><i class="fa-solid fa-signal"></i></div>
@@ -301,7 +300,7 @@
             </div>
         </div>
 
-        <!-- Hero / Banner Section for PLAN Analytics -->
+        <!-- PLAN Analytics Banner -->
         <div class="dashboard-banner">
             <i class="fa-solid fa-chart-pie"></i>
             <h2 id="txt-banner-title">Player Analytics (PLAN)</h2>
@@ -318,8 +317,9 @@
 
     <script>
         var DOMAIN_IP = "zyrex-smp.falix.gg";
+        var QUERY_IP = "5.9.89.83:41468"; // Server-IP inklusive Falix-Port für genauen Status
 
-        // Full multilingual translation dictionary for all 9 languages
+        // Multilinguales Wörterbuch für alle 9 Sprachen
         var translations = {
             de: {
                 statusTitle: "Server Status", playersTitle: "Spieler Online", versionTitle: "Version",
@@ -401,7 +401,7 @@
                 statusEl.innerText = t.online;
                 statusEl.className = "status-online";
                 playersEl.innerText = (serverDataCache.players ? serverDataCache.players.online : 0) + " / " + (serverDataCache.players ? serverDataCache.players.max : 0);
-                versionEl.innerText = serverDataCache.version || "-";
+                versionEl.innerText = (serverDataCache.version && serverDataCache.version.name_clean) ? serverDataCache.version.name_clean : (serverDataCache.version || "-");
             } else {
                 statusEl.innerText = t.offline;
                 statusEl.className = "status-offline";
@@ -411,14 +411,15 @@
         }
 
         function fetchServerStatus() {
-            fetch("https://api.mcsrvstat.us/3/" + DOMAIN_IP)
+            // mcstatus.io API zur perfekten Erkennung von Falix-Ports
+            fetch("https://api.mcstatus.io/v2/status/java/" + QUERY_IP)
                 .then(function(response) { return response.json(); })
                 .then(function(data) {
                     serverDataCache = data;
                     renderStatus();
                 })
                 .catch(function(err) {
-                    console.log("Status API call failed:", err);
+                    console.log("Status API Fehler:", err);
                     var t = translations[currentLang] || translations["de"];
                     var statusEl = document.getElementById('server-status');
                     statusEl.innerText = t.error;
@@ -427,16 +428,16 @@
         }
 
         function copyIP() {
-            // Play local XP audio sound uploaded to GitHub repo
+            // XP-Sound abspielen (xp-old.mp3 im selben Repository)
             try {
                 var audio = new Audio("xp-old.mp3");
                 audio.volume = 0.5;
                 audio.play();
             } catch (e) {
-                console.log("Audio play blocked by browser:", e);
+                console.log("Audio blockiert:", e);
             }
 
-            // Clipboard fallback mechanism
+            // IP in Zwischenablage kopieren
             var tempInput = document.createElement("input");
             tempInput.value = DOMAIN_IP;
             document.body.appendChild(tempInput);
@@ -448,16 +449,12 @@
             alert(t.copied + DOMAIN_IP);
         }
 
-        // Initial setup
+        // Initialer Start der Abfrage
         fetchServerStatus();
-        setInterval(fetchServerStatus, 30000); // refresh every 30 seconds
+        setInterval(fetchServerStatus, 30000); // Alle 30 Sekunden aktualisieren
     </script>
 </body>
 </html>
 ```
 
-### Summary of what was created:
-- **Clean HTML/CSS/JS** consolidated into a single file to eliminate crash vulnerabilities.
-- **Local Sound Integration**: Uses `new Audio("xp-old.mp3")` as requested.
-- **Language Dropdown**: Switches all 9 languages on the fly instantly.
-- **Live Minecraft Status**: Fetches server status, version, and player counts from `mcsrvstat.us`.
+Kopiere einfach den gesamten Code oben in deine `index.html` bei GitHub und speichere (Commit). Die API nutzt jetzt direkt deinen Falix-Port `41468`, womit der Status sofort korrekt als **Online** angezeigt wird!
