@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="de" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zyrex-SMP | BASIS</title>
+        <!-- Das PNG-Logo für den Browsertab und die Taskbar -->
+    <link rel="icon" type="image/png" href="logo-taskbar.png">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            cyan: '#00D2FF',
+                            purple: '#9B51E0',
+                            darkBg: '#0b0e14',
+                            cardBg: '#131822',
+                            cardBorder: '#1f293d'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Glow Effects matching Zyrex-SMP Logo */
+        .text-gradient {
+            background: linear-gradient(135deg, #00D2FF 0%, #9B51E0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, #00D2FF 0%, #9B51E0 100%);
+            transition: all 0.3s ease;
+        }
+
+        .btn-gradient:hover {
+            opacity: 0.9;
+            box-shadow: 0 0 25px rgba(0, 210, 255, 0.4), 0 0 25px rgba(155, 81, 224, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .glow-card {
+            border: 1px solid transparent;
+            background-image: linear-gradient(#131822, #131822), linear-gradient(135deg, rgba(0, 210, 255, 0.3), rgba(155, 81, 224, 0.3));
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glow-card:hover {
+            box-shadow: 0 8px 25px -5px rgba(0, 210, 255, 0.2), 0 8px 25px -5px rgba(155, 81, 224, 0.2);
+            transform: translateY(-3px);
+        }
+
+        /* Pulse Dot for Server Online Status */
+        .pulse-online {
+            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+            animation: pulse-green 2s infinite;
+        }
+
+        @keyframes pulse-green {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+
+        /* Backdrop blur menu overlay */
+        .menu-overlay {
+            background: rgba(11, 14, 20, 0.92);
+            backdrop-filter: blur(14px);
+        }
+    </style>
+</head>
+<body class="bg-[#0b0e14] text-gray-100 font-sans min-h-screen flex flex-col justify-between selection:bg-brand-cyan selection:text-black">
+
+    <!-- HEADER / NAVIGATION BAR -->
+    <header class="sticky top-0 z-50 bg-[#0b0e14]/90 backdrop-blur-md border-b border-brand-cardBorder px-4 py-3">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            
+            <!-- Left Side: Toggle Button + Logo Image -->
+            <div class="flex items-center space-x-4">
+                <!-- Hamburger / Close Toggle Button -->
+                <button id="menu-btn" aria-label="Menü umschalten" class="z-50 text-gray-300 hover:text-white focus:outline-none p-2 rounded-lg hover:bg-brand-cardBg transition flex items-center justify-center w-10 h-10">
+                    <i id="menu-icon" class="fa-solid fa-bars text-2xl transition-transform duration-300"></i>
+                </button>
+
+                <!-- Server Logo in Header -->
+                <a href="index.html" class="flex items-center space-x-2">
+                    <img src="logo.png" alt="Zyrex SMP Logo" class="h-10 w-auto object-contain hover:scale-105 transition-transform" onerror="this.onerror=null; this.src='https://placehold.co/200x60/131822/00D2FF?text=ZYREX-SMP';">
+                </a>
+            </div>
+
+            <!-- Server Status Tag (Header Quick-View) -->
+            <div class="hidden sm:flex items-center space-x-2 bg-brand-cardBg px-3 py-1.5 rounded-full border border-brand-cardBorder">
+                <span class="w-2.5 h-2.5 bg-green-500 rounded-full pulse-online"></span>
+                <span class="text-xs font-semibold uppercase tracking-wider text-green-400">Online</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- OVERLAY NAVIGATION MENU -->
+    <div id="nav-menu" class="fixed inset-0 z-40 menu-overlay flex flex-col justify-center items-center hidden opacity-0 transition-opacity duration-300">
+        <nav class="w-full max-w-md px-6 text-center space-y-6">
+            <p class="text-xs uppercase tracking-widest text-gray-400 font-semibold mb-4">Navigation</p>
+            
+            <!-- Startseite Link -->
+            <a href="index.html" class="block w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-brand-cyan/20 to-brand-purple/20 border border-brand-cyan/50 text-white font-bold text-lg hover:border-brand-cyan transition shadow-lg">
+                <i class="fa-solid fa-house mr-3 text-brand-cyan"></i>Startseite
+            </a>
+            
+            <!-- IP Redirect Link -->
+            <a href="ip.html" class="block w-full py-3.5 px-6 rounded-xl bg-brand-cardBg border border-brand-cardBorder text-gray-200 font-semibold text-lg hover:text-white hover:border-brand-purple transition">
+                <i class="fa-solid fa-network-wired mr-3 text-brand-purple"></i>Server-IP
+            </a>
+
+            <!-- Stats Link -->
+            <a href="plan.html" class="block w-full py-3.5 px-6 rounded-xl bg-brand-cardBg border border-brand-cardBorder text-gray-200 font-semibold text-lg hover:text-white hover:border-brand-purple transition">
+                <i class="fa-solid fa-chart-line mr-3 text-brand-purple"></i>Stats
+            </a>
+            
+            <!-- Kontakt Link -->
+            <a href="contact.html" class="block w-full py-3.5 px-6 rounded-xl bg-brand-cardBg border border-brand-cardBorder text-gray-200 font-semibold text-lg hover:text-white hover:border-brand-cyan transition">
+                <i class="fa-solid fa-envelope mr-3 text-brand-cyan"></i>Kontakt
+            </a>
+        </nav>
+    </div>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-grow flex flex-col items-center justify-center px-4 py-8 max-w-5xl mx-auto w-full text-center">
+        
+
+
+    </main>
+
+    <!-- FOOTER (GOOGLE SITES STYLE - FOOTER AT BOTTOM CENTER) -->
+    <footer class="w-full border-t border-brand-cardBorder bg-[#080a0f] py-6 px-4">
+        <div class="max-w-5xl mx-auto flex flex-col items-center justify-center text-center space-y-4">
+            
+            <!-- Centered Social Icons -->
+            <div class="flex items-center justify-center space-x-6">
+                <!-- Discord Icon -->
+                <a href="https://discord.gg/4tgF4z6MFH" target="_blank" rel="noopener noreferrer" title="Discord" class="w-11 h-11 rounded-full bg-brand-cardBg border border-brand-cardBorder flex items-center justify-center text-gray-300 hover:text-[#5865F2] hover:border-[#5865F2] transition hover:scale-110">
+                    <i class="fa-brands fa-discord text-xl"></i>
+                </a>
+
+                <!-- YouTube Icon -->
+                <a href="https://www.youtube.com/@zyreex_tv" target="_blank" rel="noopener noreferrer" title="YouTube" class="w-11 h-11 rounded-full bg-brand-cardBg border border-brand-cardBorder flex items-center justify-center text-gray-300 hover:text-[#FF0000] hover:border-[#FF0000] transition hover:scale-110">
+                    <i class="fa-brands fa-youtube text-xl"></i>
+                </a>
+
+                <!-- Twitch Icon -->
+                <a href="https://www.twitch.tv/zyreex_tv" target="_blank" rel="noopener noreferrer" title="Twitch" class="w-11 h-11 rounded-full bg-brand-cardBg border border-brand-cardBorder flex items-center justify-center text-gray-300 hover:text-[#9146FF] hover:border-[#9146FF] transition hover:scale-110">
+                    <i class="fa-brands fa-twitch text-xl"></i>
+                </a>
+            </div>
+
+            <!-- Footer Text -->
+            <p class="text-xs text-gray-500">
+                &copy; Zyrex-SMP. Hosted on Falixnodes. Alle Rechte vorbehalten.
+            </p>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT -->
+    <script>
+        const menuBtn = document.getElementById('menu-btn');
+        const menuIcon = document.getElementById('menu-icon');
+        const navMenu = document.getElementById('nav-menu');
+        let isOpen = false;
+
+        // Toggle Menu Function
+        function toggleMenu() {
+            isOpen = !isOpen;
+
+            if (isOpen) {
+                // Open Menu
+                navMenu.classList.remove('hidden');
+                setTimeout(() => {
+                    navMenu.classList.remove('opacity-0');
+                }, 10);
+                
+                // Change icon to white cross (Close)
+                menuIcon.classList.remove('fa-bars');
+                menuIcon.classList.add('fa-xmark', 'text-white', 'rotate-90');
+            } else {
+                // Close Menu
+                navMenu.classList.add('opacity-0');
+                setTimeout(() => {
+                    navMenu.classList.add('hidden');
+                }, 300);
+
+                // Change icon back to 3 stripes (Hamburger)
+                menuIcon.classList.remove('fa-xmark', 'text-white', 'rotate-90');
+                menuIcon.classList.add('fa-bars');
+            }
+        }
+
+        menuBtn.addEventListener('click', toggleMenu);
+
+        // Close menu on pressing Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && isOpen) {
+                toggleMenu();
+            }
+        });
+
+        /* =======================================================
+           SERVER STATUS API LOGIK (FALIXNODES PROXY SUPPORT)
+        ======================================================= */
+        const QUERY_IP = "5.9.89.83:41468";
+        
+        function fetchServerStatus() {
+            const statusEl = document.getElementById('server-status');
+            const playersEl = document.getElementById('player-count');
+            const versionEl = document.getElementById('server-version');
+
+            // API Abfrage über CORS Proxy (allorigins), um Browser-Blockaden bei Falix-Ports zu vermeiden
+            const apiUrl = "https://api.mcstatus.io/v2/status/java/" + QUERY_IP;
+            const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent(apiUrl);
+
+            fetch(proxyUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error("Netzwerk-Antwort war nicht ok");
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.online) {
+                        statusEl.innerText = "ONLINE";
+                        statusEl.className = "text-lg font-bold text-green-400";
+                        
+                        const onlinePlayers = data.players ? data.players.online : 0;
+                        const maxPlayers = data.players ? data.players.max : 0;
+                        playersEl.innerText = `${onlinePlayers} / ${maxPlayers}`;
+
+                        const verName = (data.version && data.version.name_clean) ? data.version.name_clean : (data.version ? data.version.name_raw : "1.20.x");
+                        versionEl.innerText = verName;
+                    } else {
+                        // Fallback-Abfrage falls mcstatus Offline meldet
+                        fetchFallback();
+                    }
+                })
+                .catch(err => {
+                    console.warn("Proxy/MCStatus Fehler, versuche Fallback API:", err);
+                    fetchFallback();
+                });
+        }
+
+        function fetchFallback() {
+            const statusEl = document.getElementById('server-status');
+            const playersEl = document.getElementById('player-count');
+            const versionEl = document.getElementById('server-version');
+
+            fetch("https://api.mcsrvstat.us/2/" + QUERY_IP)
+                .then(res => res.json())
+                .then(data => {
+                    if (data && data.online) {
+                        statusEl.innerText = "ONLINE";
+                        statusEl.className = "text-lg font-bold text-green-400";
+                        playersEl.innerText = `${data.players.online} / ${data.players.max}`;
+                        versionEl.innerText = data.version || "1.20.x";
+                    } else {
+                        statusEl.innerText = "OFFLINE";
+                        statusEl.className = "text-lg font-bold text-red-500";
+                        playersEl.innerText = "0 / 0";
+                        versionEl.innerText = "-";
+                    }
+                })
+                .catch(err => {
+                    console.error("Fallback API Fehler:", err);
+                    statusEl.innerText = "OFFLINE";
+                    statusEl.className = "text-lg font-bold text-red-500";
+                    playersEl.innerText = "0 / 0";
+                    versionEl.innerText = "-";
+                });
+        }
+
+        // Status Refresh Button Action
+        const refreshBtn = document.getElementById('refresh-btn');
+        const refreshIcon = document.getElementById('refresh-icon');
+
+        refreshBtn.addEventListener('click', () => {
+            refreshIcon.classList.add('fa-spin');
+            fetchServerStatus();
+            setTimeout(() => {
+                refreshIcon.classList.remove('fa-spin');
+            }, 800);
+        });
+
+        // Initialer Abruf & Intervall-Timer (alle 30 Sekunden)
+        fetchServerStatus();
+        setInterval(fetchServerStatus, 30000);
+    </script>
+</body>
+</html>

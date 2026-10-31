@@ -1,458 +1,370 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">Zyrex SMP - Server Statistics & Status</title>
-    <link rel="icon" type="image/png" href="Logo.png">
-    <!-- FontAwesome icons for Minecraft/gaming style -->
+    <title>Zyrex-SMP | Server Startseite</title>
+        <!-- Das PNG-Logo für den Browsertab und die Taskbar -->
+    <link rel="icon" type="image/png" href="logo-taskbar.png">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            cyan: '#00D2FF',
+                            purple: '#9B51E0',
+                            darkBg: '#0b0e14',
+                            cardBg: '#131822',
+                            cardBorder: '#1f293d'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent-color: #38bdf8;
-            --accent-hover: #0284c7;
-            --text-color: #f8fafc;
-            --text-secondary: #94a3b8;
-            --success: #22c55e;
-            --danger: #ef4444;
-            --border-color: #334155;
+        /* Glow Effects matching Zyrex-SMP Logo */
+        .text-gradient {
+            background: linear-gradient(135deg, #00D2FF 0%, #9B51E0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        .btn-gradient {
+            background: linear-gradient(135deg, #00D2FF 0%, #9B51E0 100%);
+            transition: all 0.3s ease;
         }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        header {
-            background-color: var(--card-bg);
-            padding: 1.5rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo i {
-            font-size: 2rem;
-            color: var(--accent-color);
-        }
-
-        .logo h1 {
-            font-size: 1.5rem;
-            letter-spacing: 1px;
-        }
-
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .server-ip-box {
-            background: #0f172a;
-            padding: 8px 16px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            user-select: none;
-        }
-
-        .server-ip-box:hover {
-            border-color: var(--accent-color);
-            transform: translateY(-1px);
-        }
-
-        .server-ip-box i {
-            color: var(--accent-color);
-        }
-
-        .lang-select {
-            background: #0f172a;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 8px 12px;
-            color: var(--text-color);
-            cursor: pointer;
-            font-weight: 600;
-            outline: none;
-            transition: all 0.2s ease;
-        }
-
-        .lang-select:hover {
-            border-color: var(--accent-color);
-        }
-
-        .container {
-            max-width: 1200px;
-            width: 100%;
-            margin: 2rem auto;
-            padding: 0 1.5rem;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        .grid-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 1.5rem;
-            border: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-icon {
-            width: 50px;
-            height: 50px;
-            background: rgba(56, 189, 248, 0.1);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: var(--accent-color);
-            flex-shrink: 0;
-        }
-
-        .card-info h3 {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .card-info p {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .status-online { color: var(--success); }
-        .status-offline { color: var(--danger); }
-        .status-loading { color: var(--text-secondary); }
-
-        .dashboard-banner {
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            padding: 3.5rem 2rem;
-            text-align: center;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .dashboard-banner i.fa-chart-pie {
-            font-size: 3.5rem;
-            color: var(--accent-color);
-            background: rgba(56, 189, 248, 0.1);
-            padding: 24px;
-            border-radius: 50%;
-        }
-
-        .dashboard-banner h2 {
-            font-size: 2rem;
-        }
-
-        .dashboard-banner p {
-            color: var(--text-secondary);
-            max-width: 650px;
-            line-height: 1.6;
-            font-size: 1.05rem;
-        }
-
-        .btn-large {
-            background-color: var(--accent-color);
-            color: #0f172a;
-            padding: 14px 32px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 14px rgba(56, 189, 248, 0.3);
-        }
-
-        .btn-large:hover {
-            background-color: var(--accent-hover);
-            color: #ffffff;
+        .btn-gradient:hover {
+            opacity: 0.9;
+            box-shadow: 0 0 25px rgba(0, 210, 255, 0.4), 0 0 25px rgba(155, 81, 224, 0.4);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
         }
 
-        footer {
-            text-align: center;
-            padding: 1.5rem;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            border-top: 1px solid var(--border-color);
-            margin-top: auto;
+        .glow-card {
+            border: 1px solid transparent;
+            background-image: linear-gradient(#131822, #131822), linear-gradient(135deg, rgba(0, 210, 255, 0.3), rgba(155, 81, 224, 0.3));
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        @media (max-width: 640px) {
-            header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .header-controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .server-ip-box {
-                justify-content: center;
-            }
-            .dashboard-banner {
-                padding: 2rem 1rem;
-            }
+        .glow-card:hover {
+            box-shadow: 0 8px 25px -5px rgba(0, 210, 255, 0.2), 0 8px 25px -5px rgba(155, 81, 224, 0.2);
+            transform: translateY(-3px);
+        }
+
+        /* Pulse Dot for Server Online Status */
+        .pulse-online {
+            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+            animation: pulse-green 2s infinite;
+        }
+
+        @keyframes pulse-green {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+
+        /* Backdrop blur menu overlay */
+        .menu-overlay {
+            background: rgba(11, 14, 20, 0.92);
+            backdrop-filter: blur(14px);
         }
     </style>
 </head>
-<body>
+<body class="bg-[#0b0e14] text-gray-100 font-sans min-h-screen flex flex-col justify-between selection:bg-brand-cyan selection:text-black">
 
-    <header>
-        <div class="logo">
-            <i class="fa-solid fa-server"></i>
-            <h1>Zyrex SMP Stats</h1>
-        </div>
-        <div class="header-controls">
-            <!-- 9 Sprachen Auswahldropdown -->
-            <select id="lang-select" class="lang-select" onchange="changeLanguage(this.value)">
-                <option value="de">🇩🇪 Deutsch</option>
-                <option value="sv">🇸🇪 Svenska</option>
-                <option value="en">🇬🇧 English</option>
-                <option value="es">🇪🇸 Español</option>
-                <option value="ch">🇨🇭 Schwiizerdütsch</option>
-                <option value="it">🇮🇹 Italiano</option>
-                <option value="nl">🇳🇱 Nederlands</option>
-                <option value="pl">🇵🇱 Polski</option>
-                <option value="fr">🇫🇷 Français</option>
-            </select>
-            <!-- Server-IP Kopierfeld -->
-            <div class="server-ip-box" onclick="copyIP()" title="Klicken zum Kopieren">
-                <i class="fa-regular fa-copy"></i>
-                <span id="ip-text">zyrexsmp2.falixsrv.me</span>
+    <!-- HEADER / NAVIGATION BAR -->
+    <header class="sticky top-0 z-50 bg-[#0b0e14]/90 backdrop-blur-md border-b border-brand-cardBorder px-4 py-3">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            
+            <!-- Left Side: Toggle Button + Logo Image -->
+            <div class="flex items-center space-x-4">
+                <!-- Hamburger / Close Toggle Button -->
+                <button id="menu-btn" aria-label="Menü umschalten" class="z-50 text-gray-300 hover:text-white focus:outline-none p-2 rounded-lg hover:bg-brand-cardBg transition flex items-center justify-center w-10 h-10">
+                    <i id="menu-icon" class="fa-solid fa-bars text-2xl transition-transform duration-300"></i>
+                </button>
+
+                <!-- Server Logo in Header -->
+                <a href="index.html" class="flex items-center space-x-2">
+                    <img src="logo.png" alt="Zyrex SMP Logo" class="h-10 w-auto object-contain hover:scale-105 transition-transform" onerror="this.onerror=null; this.src='https://placehold.co/200x60/131822/00D2FF?text=ZYREX-SMP';">
+                </a>
+            </div>
+
+            <!-- Server Status Tag (Header Quick-View) -->
+            <div class="hidden sm:flex items-center space-x-2 bg-brand-cardBg px-3 py-1.5 rounded-full border border-brand-cardBorder">
+                <span class="w-2.5 h-2.5 bg-green-500 rounded-full pulse-online"></span>
+                <span class="text-xs font-semibold uppercase tracking-wider text-green-400">Online</span>
             </div>
         </div>
     </header>
 
-    <div class="container">
-        <!-- Live Server Status Karten -->
-        <div class="grid-cards">
-            <div class="card">
-                <div class="card-icon"><i class="fa-solid fa-signal"></i></div>
-                <div class="card-info">
-                    <h3 id="txt-status-title">Server Status</h3>
-                    <p id="server-status" class="status-loading">Prüfen...</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-icon"><i class="fa-solid fa-users"></i></div>
-                <div class="card-info">
-                    <h3 id="txt-players-title">Spieler Online</h3>
-                    <p id="player-count">0 / 0</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-icon"><i class="fa-solid fa-code-branch"></i></div>
-                <div class="card-info">
-                    <h3 id="txt-version-title">Version</h3>
-                    <p id="server-version">-</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- PLAN Analytics Banner -->
-        <div class="dashboard-banner">
-            <i class="fa-solid fa-chart-pie"></i>
-            <h2 id="txt-banner-title">Player Analytics (PLAN)</h2>
-            <p id="txt-banner-desc">Erfahre alle detaillierten Statistiken, Spielzeiten, Kills und Errungenschaften der Spieler auf unserem Server.</p>
-            <a id="external-plan-link" href="http://5.9.89.83:20032/server/Zyrex-SMP/overview" target="_blank" rel="noopener noreferrer" class="btn-large">
-                <i class="fa-solid fa-arrow-up-right-from-square"></i> <span id="txt-btn">PLAN Dashboard öffnen</span>
+    <!-- OVERLAY NAVIGATION MENU -->
+    <div id="nav-menu" class="fixed inset-0 z-40 menu-overlay flex flex-col justify-center items-center hidden opacity-0 transition-opacity duration-300">
+        <nav class="w-full max-w-md px-6 text-center space-y-6">
+            <p class="text-xs uppercase tracking-widest text-gray-400 font-semibold mb-4">Navigation</p>
+            
+            <!-- Startseite Link -->
+            <a href="index.html" class="block w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-brand-cyan/20 to-brand-purple/20 border border-brand-cyan/50 text-white font-bold text-lg hover:border-brand-cyan transition shadow-lg">
+                <i class="fa-solid fa-house mr-3 text-brand-cyan"></i>Startseite
             </a>
-        </div>
+            
+            <!-- IP Redirect Link -->
+            <a href="ip.html" class="block w-full py-3.5 px-6 rounded-xl bg-brand-cardBg border border-brand-cardBorder text-gray-200 font-semibold text-lg hover:text-white hover:border-brand-purple transition">
+                <i class="fa-solid fa-network-wired mr-3 text-brand-purple"></i>Server-IP
+            </a>
+
+            <!-- Stats Link -->
+            <a href="plan.html" class="block w-full py-3.5 px-6 rounded-xl bg-brand-cardBg border border-brand-cardBorder text-gray-200 font-semibold text-lg hover:text-white hover:border-brand-purple transition">
+                <i class="fa-solid fa-chart-line mr-3 text-brand-purple"></i>Stats
+            </a>
+            
+            <!-- Kontakt Link -->
+            <a href="contact.html" class="block w-full py-3.5 px-6 rounded-xl bg-brand-cardBg border border-brand-cardBorder text-gray-200 font-semibold text-lg hover:text-white hover:border-brand-cyan transition">
+                <i class="fa-solid fa-envelope mr-3 text-brand-cyan"></i>Kontakt
+            </a>
+        </nav>
     </div>
 
-    <footer>
-        <p>&copy; Zyrex SMP. Powered by PLAN Plugin & GitHub Pages.</p>
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-grow flex flex-col items-center justify-center px-4 py-8 max-w-5xl mx-auto w-full text-center">
+        
+        <!-- Big Prominent Hero Logo -->
+        <div class="mb-8 w-full flex justify-center">
+            <img src="logo.png" alt="Zyrex SMP Logo Banner" class="max-w-xs sm:max-w-md md:max-w-lg h-auto object-contain drop-shadow-[0_10px_25px_rgba(0,210,255,0.25)]" onerror="this.onerror=null; this.src='https://placehold.co/600x180/131822/00D2FF?text=ZYREX-SMP';">
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-3">
+            Willkommen zum <span class="text-gradient">Zyrex-SMP!</span>
+        </h1>
+        <p class="text-gray-400 max-w-xl text-sm sm:text-base mb-8">
+           Der Minecraft-server für den streamer Zyrex
+        </p>
+
+        <!-- SERVER LIVE STATUS CARDS -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full mb-6">
+            
+            <!-- Card 1: Status -->
+            <div class="glow-card p-5 rounded-2xl flex flex-col items-center justify-center">
+                <div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-green-400 mb-3">
+                    <i class="fa-solid fa-server text-lg"></i>
+                </div>
+                <span class="text-xs text-gray-400 uppercase tracking-wider font-semibold">Server Status</span>
+                <div class="flex items-center space-x-2 mt-1">
+                    <span class="w-2.5 h-2.5 bg-green-500 rounded-full pulse-online"></span>
+                    <span id="server-status" class="text-lg font-bold text-white">ONLINE</span>
+                </div>
+            </div>
+
+            <!-- Card 2: Players -->
+            <div class="glow-card p-5 rounded-2xl flex flex-col items-center justify-center">
+                <div class="w-10 h-10 rounded-full bg-brand-cyan/10 flex items-center justify-center text-brand-cyan mb-3">
+                    <i class="fa-solid fa-users text-lg"></i>
+                </div>
+                <span class="text-xs text-gray-400 uppercase tracking-wider font-semibold">Spieler Online</span>
+                <span id="player-count" class="text-lg font-bold text-white mt-1">0 / 20</span>
+            </div>
+
+            <!-- Card 3: Version -->
+            <div class="glow-card p-5 rounded-2xl flex flex-col items-center justify-center">
+                <div class="w-10 h-10 rounded-full bg-brand-purple/10 flex items-center justify-center text-brand-purple mb-3">
+                    <i class="fa-solid fa-cube text-lg"></i>
+                </div>
+                <span class="text-xs text-gray-400 uppercase tracking-wider font-semibold">Minecraft Version</span>
+                <span id="server-version" class="text-lg font-bold text-white mt-1">1.20.x</span>
+            </div>
+
+        </div>
+
+        <!-- REFRESH BUTTON FOR STATUS -->
+        <div class="mb-10">
+            <button id="refresh-btn" class="text-xs text-gray-400 hover:text-brand-cyan flex items-center space-x-2 bg-brand-cardBg border border-brand-cardBorder px-4 py-2 rounded-lg transition">
+                <i class="fa-solid fa-rotate-right" id="refresh-icon"></i>
+                <span>Status Aktualisieren</span>
+            </button>
+        </div>
+
+        <!-- CALL TO ACTION REDIRECT BUTTON TO IP.HTML -->
+        <div class="w-full flex justify-center mb-6">
+            <a href="ip.html" class="btn-gradient px-8 py-4 rounded-xl text-black font-extrabold text-lg sm:text-xl flex items-center space-x-3 shadow-lg group">
+                <span>Server-IP</span>
+                <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+            </a>
+        </div>
+
+    </main>
+
+    <!-- FOOTER (GOOGLE SITES STYLE - FOOTER AT BOTTOM CENTER) -->
+    <footer class="w-full border-t border-brand-cardBorder bg-[#080a0f] py-6 px-4">
+        <div class="max-w-5xl mx-auto flex flex-col items-center justify-center text-center space-y-4">
+            
+            <!-- Centered Social Icons -->
+            <div class="flex items-center justify-center space-x-6">
+                <!-- Discord Icon -->
+                <a href="https://discord.gg/4tgF4z6MFH" target="_blank" rel="noopener noreferrer" title="Discord" class="w-11 h-11 rounded-full bg-brand-cardBg border border-brand-cardBorder flex items-center justify-center text-gray-300 hover:text-[#5865F2] hover:border-[#5865F2] transition hover:scale-110">
+                    <i class="fa-brands fa-discord text-xl"></i>
+                </a>
+
+                <!-- YouTube Icon -->
+                <a href="https://www.youtube.com/@zyreex_tv" target="_blank" rel="noopener noreferrer" title="YouTube" class="w-11 h-11 rounded-full bg-brand-cardBg border border-brand-cardBorder flex items-center justify-center text-gray-300 hover:text-[#FF0000] hover:border-[#FF0000] transition hover:scale-110">
+                    <i class="fa-brands fa-youtube text-xl"></i>
+                </a>
+
+                <!-- Twitch Icon -->
+                <a href="https://www.twitch.tv/zyreex_tv" target="_blank" rel="noopener noreferrer" title="Twitch" class="w-11 h-11 rounded-full bg-brand-cardBg border border-brand-cardBorder flex items-center justify-center text-gray-300 hover:text-[#9146FF] hover:border-[#9146FF] transition hover:scale-110">
+                    <i class="fa-brands fa-twitch text-xl"></i>
+                </a>
+            </div>
+
+            <!-- Footer Text -->
+            <p class="text-xs text-gray-500">
+                &copy; Zyrex-SMP. Hosted on Falixnodes. Alle Rechte vorbehalten.
+            </p>
+        </div>
     </footer>
 
+    <!-- INTERACTIVE JAVASCRIPT -->
     <script>
-        var DOMAIN_IP = "zyrexsmp2.falixsrv.me";
-        var QUERY_IP = "5.9.89.83:41468"; // Server-IP inklusive Falix-Port für genauen Status
+        const menuBtn = document.getElementById('menu-btn');
+        const menuIcon = document.getElementById('menu-icon');
+        const navMenu = document.getElementById('nav-menu');
+        let isOpen = false;
 
-        // Multilinguales Wörterbuch für alle 9 Sprachen
-        var translations = {
-            de: {
-                statusTitle: "Server Status", playersTitle: "Spieler Online", versionTitle: "Version",
-                bannerTitle: "Player Analytics (PLAN)", bannerDesc: "Erfahre alle detaillierten Statistiken, Spielzeiten, Kills und Errungenschaften der Spieler auf unserem Server.",
-                btnText: "PLAN Dashboard öffnen", online: "Online", offline: "Offline", checking: "Prüfen...", error: "Fehler", copied: "Server-IP kopiert: "
-            },
-            sv: {
-                statusTitle: "Serverstatus", playersTitle: "Spelare Online", versionTitle: "Version",
-                bannerTitle: "Player Analytics (PLAN)", bannerDesc: "Se alla detaljerade statistik, spelade timmar, kills och prestationer för spelare på vår server.",
-                btnText: "Öppna PLAN Dashboard", online: "Online", offline: "Offline", checking: "Kontrollerar...", error: "Fel", copied: "Server-IP kopierad: "
-            },
-            en: {
-                statusTitle: "Server Status", playersTitle: "Players Online", versionTitle: "Version",
-                bannerTitle: "Player Analytics (PLAN)", bannerDesc: "Check out detailed statistics, playtime, kills and achievements of players on our server.",
-                btnText: "Open PLAN Dashboard", online: "Online", offline: "Offline", checking: "Checking...", error: "Error", copied: "Server IP copied: "
-            },
-            es: {
-                statusTitle: "Estado del Servidor", playersTitle: "Jugadores en Línea", versionTitle: "Versión",
-                bannerTitle: "Player Analytics (PLAN)", bannerDesc: "Consulta estadísticas detalladas, tiempo de juego, bajas y logros de los jugadores en nuestro servidor.",
-                btnText: "Abrir Panel PLAN", online: "En línea", offline: "Desconectado", checking: "Comprobando...", error: "Error", copied: "¡IP del servidor copiada: "
-            },
-            ch: {
-                statusTitle: "Server Status", playersTitle: "Spieler Online", versionTitle: "Version",
-                bannerTitle: "Player Analytics (PLAN)", bannerDesc: "lueg all d'Statistiken, Spiilziite, Kills und Achievement vo de Spiiler uf eusem Server naa.",
-                btnText: "PLAN Dashboard ufmache", online: "Online 🎉", offline: "Offliine", checking: "Am Prüfe...", error: "Fehler", copied: "Server-IP kopiert: "
-            },
-            it: {
-                statusTitle: "Stato del Server", playersTitle: "Giocatori Online", versionTitle: "Versione",
-                bannerTitle: "Player Analytics (PLAN)", bannerDesc: "Scopri statistiche dettagliate, ore di gioco, kill e obiettivi dei giocatori sul nostro server.",
-                btnText: "Apri PLAN Dashboard", online: "Online", offline: "Offline", checking: "Verifica...", error: "Errore", copied: "IP del server copiato: "
-            },
-            nl: {
-                statusTitle: "Server Status", playersTitle: "Spelers Online", versionTitle: "Versie",
-                bannerTitle: "Player Analytics (PLAN)", bannerDesc: "Bekijk gedetailleerde statistieken, speeltijd, kills en prestaties van spelers op onze server.",
-                btnText: "Open PLAN Dashboard", online: "Online", offline: "Offline", checking: "Controleren...", error: "Fout", copied: "Server-IP gekopieerd: "
-            },
-            pl: {
-                statusTitle: "Status Serwera", playersTitle: "Gracze Online", versionTitle: "Wersja",
-                bannerTitle: "Player Analytics (PLAN)", bannerDesc: "Sprawdź szczegółowe statystyki, czas gry, zabójstwa i osiągnięcia graczy na naszym serwerze.",
-                btnText: "Otwórz Panel PLAN", online: "Online", offline: "Offline", checking: "Sprawdzanie...", error: "Błąd", copied: "Skopiowano IP serwera: "
-            },
-            fr: {
-                statusTitle: "État du Serveur", playersTitle: "Joueurs en Ligne", versionTitle: "Version",
-                bannerTitle: "Player Analytics (PLAN)", bannerDesc: "Découvrez des statistiques détaillées, le temps de jeu, les kills et les succès des joueurs sur notre serveur.",
-                btnText: "Ouvrir le Tableau PLAN", online: "En ligne", offline: "Hors ligne", checking: "Vérification...", error: "Erreur", copied: "IP du serveur copiée : "
-            }
-        };
+        // Toggle Menu Function
+        function toggleMenu() {
+            isOpen = !isOpen;
 
-        var currentLang = "de";
-        var serverDataCache = null;
-
-        function changeLanguage(lang) {
-            currentLang = lang;
-            var t = translations[currentLang] || translations["de"];
-            
-            document.getElementById("txt-status-title").innerText = t.statusTitle;
-            document.getElementById("txt-players-title").innerText = t.playersTitle;
-            document.getElementById("txt-version-title").innerText = t.versionTitle;
-            document.getElementById("txt-banner-title").innerText = t.bannerTitle;
-            document.getElementById("txt-banner-desc").innerText = t.bannerDesc;
-            document.getElementById("txt-btn").innerText = t.btnText;
-
-            renderStatus();
-        }
-
-        function renderStatus() {
-            var t = translations[currentLang] || translations["de"];
-            var statusEl = document.getElementById('server-status');
-            var playersEl = document.getElementById('player-count');
-            var versionEl = document.getElementById('server-version');
-
-            if (!serverDataCache) {
-                statusEl.innerText = t.checking;
-                statusEl.className = "status-loading";
-                return;
-            }
-
-            if (serverDataCache.online) {
-                statusEl.innerText = t.online;
-                statusEl.className = "status-online";
-                playersEl.innerText = (serverDataCache.players ? serverDataCache.players.online : 0) + " / " + (serverDataCache.players ? serverDataCache.players.max : 0);
-                versionEl.innerText = (serverDataCache.version && serverDataCache.version.name_clean) ? serverDataCache.version.name_clean : (serverDataCache.version || "-");
+            if (isOpen) {
+                // Open Menu
+                navMenu.classList.remove('hidden');
+                setTimeout(() => {
+                    navMenu.classList.remove('opacity-0');
+                }, 10);
+                
+                // Change icon to white cross (Close)
+                menuIcon.classList.remove('fa-bars');
+                menuIcon.classList.add('fa-xmark', 'text-white', 'rotate-90');
             } else {
-                statusEl.innerText = t.offline;
-                statusEl.className = "status-offline";
-                playersEl.innerText = "0 / 0";
-                versionEl.innerText = "-";
+                // Close Menu
+                navMenu.classList.add('opacity-0');
+                setTimeout(() => {
+                    navMenu.classList.add('hidden');
+                }, 300);
+
+                // Change icon back to 3 stripes (Hamburger)
+                menuIcon.classList.remove('fa-xmark', 'text-white', 'rotate-90');
+                menuIcon.classList.add('fa-bars');
             }
         }
 
+        menuBtn.addEventListener('click', toggleMenu);
+
+        // Close menu on pressing Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && isOpen) {
+                toggleMenu();
+            }
+        });
+
+        /* =======================================================
+           SERVER STATUS API LOGIK (FALIXNODES PROXY SUPPORT)
+        ======================================================= */
+        const QUERY_IP = "5.9.89.83:41468";
+        
         function fetchServerStatus() {
-            // mcstatus.io API zur perfekten Erkennung von Falix-Ports
-            fetch("https://api.mcstatus.io/v2/status/java/" + QUERY_IP)
-                .then(function(response) { return response.json(); })
-                .then(function(data) {
-                    serverDataCache = data;
-                    renderStatus();
+            const statusEl = document.getElementById('server-status');
+            const playersEl = document.getElementById('player-count');
+            const versionEl = document.getElementById('server-version');
+
+            // API Abfrage über CORS Proxy (allorigins), um Browser-Blockaden bei Falix-Ports zu vermeiden
+            const apiUrl = "https://api.mcstatus.io/v2/status/java/" + QUERY_IP;
+            const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent(apiUrl);
+
+            fetch(proxyUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error("Netzwerk-Antwort war nicht ok");
+                    return response.json();
                 })
-                .catch(function(err) {
-                    console.log("Status API Fehler:", err);
-                    var t = translations[currentLang] || translations["de"];
-                    var statusEl = document.getElementById('server-status');
-                    statusEl.innerText = t.error;
-                    statusEl.className = "status-offline";
+                .then(data => {
+                    if (data && data.online) {
+                        statusEl.innerText = "ONLINE";
+                        statusEl.className = "text-lg font-bold text-green-400";
+                        
+                        const onlinePlayers = data.players ? data.players.online : 0;
+                        const maxPlayers = data.players ? data.players.max : 0;
+                        playersEl.innerText = `${onlinePlayers} / ${maxPlayers}`;
+
+                        const verName = (data.version && data.version.name_clean) ? data.version.name_clean : (data.version ? data.version.name_raw : "1.20.x");
+                        versionEl.innerText = verName;
+                    } else {
+                        // Fallback-Abfrage falls mcstatus Offline meldet
+                        fetchFallback();
+                    }
+                })
+                .catch(err => {
+                    console.warn("Proxy/MCStatus Fehler, versuche Fallback API:", err);
+                    fetchFallback();
                 });
         }
 
-        function copyIP() {
-            // XP-Sound abspielen (xp-old.mp3 im selben Repository)
-            try {
-                var audio = new Audio("xp-old.mp3");
-                audio.volume = 0.5;
-                audio.play();
-            } catch (e) {
-                console.log("Audio blockiert:", e);
-            }
+        function fetchFallback() {
+            const statusEl = document.getElementById('server-status');
+            const playersEl = document.getElementById('player-count');
+            const versionEl = document.getElementById('server-version');
 
-            // IP in Zwischenablage kopieren
-            var tempInput = document.createElement("input");
-            tempInput.value = DOMAIN_IP;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand("copy");
-            document.body.removeChild(tempInput);
-
-            var t = translations[currentLang] || translations["de"];
-            alert(t.copied + DOMAIN_IP);
+            fetch("https://api.mcsrvstat.us/2/" + QUERY_IP)
+                .then(res => res.json())
+                .then(data => {
+                    if (data && data.online) {
+                        statusEl.innerText = "ONLINE";
+                        statusEl.className = "text-lg font-bold text-green-400";
+                        playersEl.innerText = `${data.players.online} / ${data.players.max}`;
+                        versionEl.innerText = data.version || "1.20.x";
+                    } else {
+                        statusEl.innerText = "OFFLINE";
+                        statusEl.className = "text-lg font-bold text-red-500";
+                        playersEl.innerText = "0 / 0";
+                        versionEl.innerText = "-";
+                    }
+                })
+                .catch(err => {
+                    console.error("Fallback API Fehler:", err);
+                    statusEl.innerText = "OFFLINE";
+                    statusEl.className = "text-lg font-bold text-red-500";
+                    playersEl.innerText = "0 / 0";
+                    versionEl.innerText = "-";
+                });
         }
 
-        // Initialer Start der Abfrage
+        // Status Refresh Button Action
+        const refreshBtn = document.getElementById('refresh-btn');
+        const refreshIcon = document.getElementById('refresh-icon');
+
+        refreshBtn.addEventListener('click', () => {
+            refreshIcon.classList.add('fa-spin');
+            fetchServerStatus();
+            setTimeout(() => {
+                refreshIcon.classList.remove('fa-spin');
+            }, 800);
+        });
+
+        // Initialer Abruf & Intervall-Timer (alle 30 Sekunden)
         fetchServerStatus();
-        setInterval(fetchServerStatus, 30000); // Alle 30 Sekunden aktualisieren
+        setInterval(fetchServerStatus, 30000);
     </script>
 </body>
 </html>
