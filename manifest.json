@@ -1,6 +1,6 @@
 {
-  "name": "ZyrexSMP",
-  "short_name": "ZyrexSMP",
+  "name": "Zyrex-SMP",
+  "short_name": "Z-SMP",
   "start_url": "/zyrexsmp/",
   "scope": "/zyrexsmp/",
   "display": "standalone",
@@ -9,7 +9,7 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "logo-taskbar.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
